@@ -1,0 +1,14 @@
+.header{
+    height: 60px;
+    
+}
+.container__header{
+    display: flex;
+    background-color: black;
+}
+
+.header__nav > ul{
+    list-style: none;
+    display: flex;
+}
+

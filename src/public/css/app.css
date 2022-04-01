@@ -1,0 +1,247 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0; }
+
+.header {
+  height: 60px;
+  display: flex;
+  box-shadow: 2px 1px 2px 1px rgba(0, 0, 0, 0.1); }
+
+.container__header {
+  display: flex;
+  justify-content: space-between; }
+
+.header__logo {
+  flex: 1;
+  margin: auto; }
+
+.header__search {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  flex: 0.9;
+  border-radius: 5px;
+  background-color: #efefef; }
+
+.header__search input {
+  outline: none;
+  border: none;
+  background-color: inherit;
+  flex: 1; }
+
+.header__search i {
+  margin-left: 16px;
+  margin-right: 13px; }
+
+.header__nav {
+  flex: 1;
+  margin: auto; }
+
+.header__nav > ul {
+  list-style: none;
+  display: flex;
+  margin-bottom: 0; }
+
+.header__nav .nav__item {
+  margin-left: 24px; }
+
+.container__body {
+  display: flex; }
+
+.container__body .left {
+  flex: 2; }
+
+.container__body .right {
+  flex: 1;
+  padding: 23px 0px 0px 11px;
+  }
+
+.body {
+  margin-top: 18px; }
+
+.body__story {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  height: 119px;
+  display: flex;
+  margin-bottom: 18px; }
+
+.container__story {
+  margin: auto 0px auto 20px;
+  display: flex;
+  list-style: none; }
+
+.container__story .story__item {
+  margin: auto 0px;
+  width: 80px; }
+
+.story__item .story__img {
+  width: 66px;
+  height: 66px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 32px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat; }
+
+.story__user-name {
+  color: #555555;
+  font-size: 12px; }
+
+.body__newsfeed {
+  min-height: 1090px;
+  border: 1px solid rgba(0, 0, 0, 0.1); }
+
+.header__news {
+  display: flex;
+  padding: 10px;
+  justify-content: space-between; }
+
+.header__infor {
+  display: flex;
+  align-items: center; }
+
+.header__infor-user-img {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  overflow: hidden; }
+
+.header__infor-user-img > img {
+  width: 100%;
+  object-fit: cover; }
+
+.news__main-img img {
+  width: 100%; }
+
+.header__infor-user-name {
+  margin-left: 10px;
+  font-size: 14px;
+  font-weight: 500; }
+
+.footer__newsfeed {
+  padding: 10px; }
+
+.news__actions {
+  display: flex;
+  justify-content: space-between; }
+
+.news__likes {
+  font-size: 14px;
+  font-weight: 500; }
+
+.news__content-user-name {
+  font-size: 14px;
+  font-weight: 500; }
+
+.news__content .content {
+  font-size: 14px; }
+
+.news__post-time {
+  text-transform: uppercase;
+  color: #555555;
+  font-size: 10px; }
+
+.form__comment {
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px; }
+
+.form__comment-left {
+  flex: 1;
+  display: flex; }
+
+.form__comment-left input {
+  outline: none;
+  border: none;
+  flex: 1;
+  margin-left: 10px;
+  font-size: 13px; }
+
+.right .container__user {
+  display: flex; }
+
+.container__user .container__img {
+  width: 56px;
+  height: 56px;
+  overflow: hidden; }
+
+.container__user .container__img {
+  border-radius: 28px; }
+
+.container__user .container__img img {
+  width: 100%; }
+
+.container__user .container__name {
+  display: flex;
+  margin-left: 15px;
+  justify-content: center;
+  flex: 1;
+  flex-direction: column;
+  font-size: 14px; }
+
+.container__user .container__name .name {
+  font-weight: 500; }
+
+.container__user .container__name .desc-name {
+  color: #555555; }
+
+.user-suggestion {
+  display: flex;
+  justify-content: space-between; }
+
+.user-suggestion .content__suggestion {
+  font-weight: 500;
+  font-size: 14px;
+  color: #8e8e8e; }
+
+.btn__post-comment {
+  outline: none; }
+
+.btn-switch {
+  border: none;
+  outline: none;
+  color: #0f9bf6;
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent; }
+
+.btn-suggestion {
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  background-color: transparent; }
+
+.container__user-suggestion .container__user-suggestion_item {
+  display: flex;
+  justify-content: space-between; }
+
+.container__user-suggestion_item .container__img {
+  width: 36px;
+  height: 36px;
+  border-radius: 28px;
+  overflow: hidden; }
+
+.container__user-suggestion_item .container__img img {
+  width: 100%; }
+
+.container__user-suggestion .container__user-suggestion_item .container__name {
+  margin-left: 15px; }
+
+.container__user-suggestion .container__user-suggestion_item .container__name {
+  flex: 1; }
+
+.container__user-suggestion_item .container__name .name {
+  font-weight: 500;
+  font-size: 14px; }
+
+.container__user-suggestion_item .container__name .user-follow {
+  color: #555555;
+  font-size: 12px; }
