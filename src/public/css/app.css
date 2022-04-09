@@ -6,7 +6,11 @@
 .header {
   height: 60px;
   display: flex;
-  box-shadow: 2px 1px 2px 1px rgba(0, 0, 0, 0.1); }
+  box-shadow: 2px 1px 2px 1px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0; }
 
 .container__header {
   display: flex;
@@ -47,6 +51,49 @@
 .header__nav .nav__item {
   margin-left: 24px; }
 
+.header__nav .nav__item:last-child {
+  position: relative;
+  z-index: 1; }
+
+.checkbox:checked ~ .header__popup {
+  display: block;
+  position: absolute;
+  right: -90%;
+  top: 178%; }
+
+.header__popup {
+  z-index: 99999;
+  display: none;
+  width: 230px;
+  height: 185px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  background-color: #fafafa; }
+
+.header__popup::before {
+  position: absolute;
+  top: -10%;
+  right: 10%;
+  content: "";
+  display: block;
+  width: 19px;
+  height: 19px;
+  background-color: transparent;
+  border-bottom: 10px solid gray;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent; }
+
+.header__container-user {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  overflow: hidden; }
+
+.header__container-user img {
+  width: 100%; }
+
 .container__body {
   display: flex; }
 
@@ -55,11 +102,11 @@
 
 .container__body .right {
   flex: 1;
-  padding: 23px 0px 0px 11px;
-  }
+  padding: 10px 0px 50px 0; }
 
 .body {
-  margin-top: 18px; }
+  padding-top: 80px;
+  background-color: #fafafa; }
 
 .body__story {
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -86,11 +133,14 @@
   background-repeat: no-repeat; }
 
 .story__user-name {
-  color: #555555;
+  color: #bcbcbc;
   font-size: 12px; }
 
 .body__newsfeed {
-  min-height: 1090px;
+  min-height: 1090px; }
+
+.body__newsfeed .container__news {
+  margin-bottom: 30px;
   border: 1px solid rgba(0, 0, 0, 0.1); }
 
 .header__news {
@@ -142,8 +192,12 @@
 
 .news__post-time {
   text-transform: uppercase;
-  color: #555555;
+  color: #bcbcbc;
   font-size: 10px; }
+
+.news__views__comment {
+  color: #bcbcbc;
+  font-size: 14px; }
 
 .form__comment {
   width: 100%;
@@ -190,7 +244,7 @@
   font-weight: 500; }
 
 .container__user .container__name .desc-name {
-  color: #555555; }
+  color: #bcbcbc; }
 
 .user-suggestion {
   display: flex;
@@ -243,5 +297,50 @@
   font-size: 14px; }
 
 .container__user-suggestion_item .container__name .user-follow {
-  color: #555555;
+  color: #bcbcbc;
   font-size: 12px; }
+
+.header__userPage {
+  display: flex;
+  margin-top: 10%;
+  padding-bottom: 3%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+
+.header__userPage-avatar {
+  width: 151px;
+  height: 151px;
+  overflow: hidden;
+  margin: 0 10% 0 10%;
+  border-radius: 75px; }
+
+.header__userPage-avatar img {
+  width: 100%; }
+
+.header__userpage-infor .container__user-name {
+  font-size: 25px; }
+
+.container__below-user-infor {
+  display: flex; }
+
+.container__below-user-infor .num-posts {
+  margin-right: 10%; }
+
+.container__below-user-infor .num-posts span {
+  font-weight: 500;
+  margin-right: 10%; }
+
+.body__userPage-nav {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 1% 0;
+  letter-spacing: 1px; }
+
+.body__userPage-nav-item {
+  margin-right: 5%; }
+
+.body__userPage-nav-item :last-child {
+  margin: unset; }
+
+.body__userPage-posts .post img {
+  width: 100%; }

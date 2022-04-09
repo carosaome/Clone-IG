@@ -1,14 +1,12 @@
 import users from "../app/models/users.js"
 
 function requireAuth(req, res, next){
-    console.log();
-    console.log(req.signedCookies.Userid);
-    if(!req.cookies.Userid){
+    if(!req.signedCookies.Userid){
         res.redirect('/login')
         return
     }
-    let user = users.find({email: req.signedCookies.Userid})
-
+    let user = users.findById(req.signedCookies.Userid)
+    
     if(!user){
         res.redirect('/login')
         return

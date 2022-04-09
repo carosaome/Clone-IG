@@ -1,4 +1,6 @@
 import express from "express"
+import dotenv from "dotenv"
+dotenv.config()
 import morgan from "morgan"
 import Handlebars from "handlebars"
 import {engine} from "express-handlebars"
@@ -18,7 +20,7 @@ app.engine('hbs', engine({
 app.use(express.static('src/public'))
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-app.use(cookieParser('zxcbxcx'))
+app.use(cookieParser(process.env.SECRET_KEY))
 
 app.set('view engine','hbs') 
 app.set('views','src/resources/views')

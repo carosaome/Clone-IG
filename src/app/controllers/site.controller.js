@@ -1,14 +1,14 @@
-import Course from "../models/course.js"
+import PostModel from "../models/posts.js"
+import UserModel from "../models/users.js"
 class SiteController{
-    index(req, res, next){
+    async index (req, res, next){
 
-        Course.find({})
-        .then((courses)=>{
-            res.render('home',{courses})
+        PostModel.find({})
+        .then((posts)=>{
+            res.render('home',{posts})
         })
         .catch(next)
         
-        // res.render('home')
 
     }
     search(req, res){
