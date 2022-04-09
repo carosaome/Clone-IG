@@ -6,6 +6,7 @@ function requireAuth(req, res, next){
         return
     }
     let user = users.findById(req.signedCookies.Userid)
+    res.locals.Userid = user._id    
     
     if(!user){
         res.redirect('/login')

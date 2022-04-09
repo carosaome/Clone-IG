@@ -48,7 +48,6 @@ class AuthController {
                         signed: true
                     })
                     res.redirect('/')
-                    res.send('Login sucess')
                 }
                 else {
 

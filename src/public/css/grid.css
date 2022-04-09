@@ -503,7 +503,7 @@
     .wide .l-4 {
         flex: 0 0 33.33333%;
         max-width: 33.33333%;
-    }
+    max-height: 33.33333%;}
 
     .wide .l-5 {
         flex: 0 0 41.66667%;
