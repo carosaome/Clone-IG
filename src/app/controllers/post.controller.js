@@ -5,7 +5,7 @@ class PostController{
         res.render('pagePost')
     }
    async createPost(req, res){
-        req.body.imgUrl = req.file.path.split('\\').slice(2).join('\\') 
+        req.body.imgUrl = res.locals.imgUrl
         const foundUser = await UserModel.findById(req.signedCookies.Userid)
         req.body.createdBy = foundUser.username
         PostModel.create(req.body)

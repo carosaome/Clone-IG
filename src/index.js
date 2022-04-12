@@ -1,6 +1,6 @@
 import express from "express"
 import dotenv from "dotenv"
-dotenv.config()
+dotenv.config({path:'.env'})
 import morgan from "morgan"
 import Handlebars from "handlebars"
 import {engine} from "express-handlebars"
@@ -28,8 +28,7 @@ app.set('views','src/resources/views')
 route(app)
 
 connect()
-
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
     console.log(`Example app listening on port http://localhost:${port}`)
 })
 

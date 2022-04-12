@@ -7,8 +7,8 @@ import requireAuth from "../middleware/auth.middleware.js"
 function route(app){
     app.use('/login',login)
     app.use('/register',register)
-    app.use('/post', requireAuth ,post)
-    app.use('/api/comments', comment)
+    app.use('/post' ,post)
+    app.use('/api/comment', comment)
     app.use('/', site)
 }
 

@@ -65,7 +65,7 @@
 
                     </div>
                     <div class="news__main-img">
-                      <img src="{{this.imgUrl}}" alt="">
+                        <img src="{{this.imgUrl}}" alt="">
                     </div>
                     <div class="footer__newsfeed">
                         <div class="news__actions">
@@ -93,7 +93,8 @@
                                             x1="22" x2="9.218" y1="3" y2="10.083"></line>
                                         <polygon fill="none"
                                             points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"
-                                            stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon>
+                                            stroke="currentColor" stroke-linejoin="round" stroke-width="2">
+                                        </polygon>
                                     </svg>
                                 </span>
                             </div>
@@ -125,7 +126,8 @@
                         </div>
                     </div>
                     <div class="container__comment">
-                        <form action="/api/comments" class="form__comment" method="POST" >
+                        <form id="{{this._id}}" class="form__comment">
+
                             <div class="form__comment-left">
                                 <svg aria-label="Emoji" class="_8-yf5 " color="#262626" fill="#262626" height="24"
                                     role="img" viewBox="0 0 24 24" width="24">
@@ -140,41 +142,74 @@
                         </form>
                     </div>
                 </div>
+
                 {{/each}}
             </div>
         </div>
         <div class="right">
-            <div class="container__user">
-                <div class="container__img">
-                    <img src="data:image/png;base64,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"
-                        alt="">
-
-                </div>
-                <div class="container__name">
-                    <span class="name">carosaome</span>
-                    <span class="desc-name">call me caros</span>
-                </div>
-                <button class=" btn-switch">Switch</button>
-            </div>
-            <div class="user-suggestion">
-                <span class="content__suggestion">Suggestions For You</span>
-                <button class="btn-suggestion">See All</button>
-            </div>
-            <div class="container__user-suggestion">
-                <div class="container__user-suggestion_item">
+            <div class="container__right">
+                <div class="container__user">
                     <div class="container__img">
                         <img src="data:image/png;base64,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"
                             alt="">
 
                     </div>
                     <div class="container__name">
-                        <div class="name">carosaome</div>
-                        <div class="user-follow">Follows you</div>
+                        <span class="name">carosaome</span>
+                        <span class="desc-name">call me caros</span>
                     </div>
-                    <button class="btn-switch">Follow</button>
+                    <button class=" btn-switch">Switch</button>
                 </div>
+                <div class="user-suggestion">
+                    <span class="content__suggestion">Suggestions For You</span>
+                    <button class="btn-suggestion">See All</button>
+                </div>
+                <div class="container__user-suggestion">
+                    <div class="container__user-suggestion_item">
+                        <div class="container__img">
+                            <img src="data:image/png;base64,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"
+                                alt="">
 
+                        </div>
+                        <div class="container__name">
+                            <div class="name">carosaome</div>
+                            <div class="user-follow">Follows you</div>
+                        </div>
+                        <button class="btn-switch">Follow</button>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    let formSubmit = document.querySelectorAll('.form__comment')
+    formSubmit.forEach((item) => {
+        item.addEventListener('submit', async (e) => {
+            e.preventDefault()
+            const postId = item.getAttribute('id')
+            const data = {postId}
+            const sendComment = await fetch('/api/comment', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                body: JSON.stringify(data)
+            })
+            .then((res)=> res.json())
+            .then((data)=>{
+                console.log(data)
+            })
+
+        })
+    })
+
+</script>

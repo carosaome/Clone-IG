@@ -21,7 +21,7 @@ class SiteController {
                 res.render('user/privatePage', { foundUser, ownPosts })
             }
             else {
-                throw new Error('404 err')
+                throw new Error('404 user not found')
             }
         } catch (error) {
             next(error)
@@ -42,3 +42,4 @@ class SiteController {
     }
 }
 export default new SiteController
+console.log(process.env.CLOUD_SECRET_KEY);

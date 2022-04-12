@@ -6,7 +6,7 @@ class CommentController{
     }
     createComment(req, res){
         CommentModel.create(req.body)
-        res.redirect('back')
+        res.json(req.body)
     }
     
 }
