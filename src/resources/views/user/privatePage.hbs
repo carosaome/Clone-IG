@@ -69,8 +69,11 @@
     <div class="body__userPage-posts row">
         {{#each ownPosts}}
         <div class="post col l-4">
-           <img src="{{this.imgUrl}}" alt="">
+            <a href="/post/{{this._id}}">
+            <img src="{{this.imgUrl}}" alt="">
+            </a>
         </div>
+
         {{/each}}
 
     </div>

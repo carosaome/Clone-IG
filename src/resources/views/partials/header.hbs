@@ -133,11 +133,12 @@
   const btnLogOut = document.querySelector("body > div.header > div > div.header__nav > ul > label > ul > li:nth-child(5)")
 
   function fetchDataUser(){
-     fetch('http://localhost:9999/user')
+     fetch('/user')
       .then((res)=> res.json())
       .then((data)=>{
-        link.setAttribute('href', data.username)
-        avatar.setAttribute('src', data.avatar)
+        link.setAttribute('href', `/${data.username}`)
+        avatar.setAttribute('src', `/${data.avatar}`)
+        console.log(data)
       })
   }
   fetchDataUser()

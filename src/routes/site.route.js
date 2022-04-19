@@ -4,6 +4,7 @@ import requireAuth from "../middleware/auth.middleware.js"
 const router = express.Router()
 const site = SiteController
 router.get('/user',requireAuth,site.getUserName)
+router.get('/posts',requireAuth ,site.loadPost)
 router.get('/:username',requireAuth,site.renderUserPage)
 router.get('/',requireAuth ,site.index)
 

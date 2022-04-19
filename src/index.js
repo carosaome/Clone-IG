@@ -1,6 +1,5 @@
 import express from "express"
-import dotenv from "dotenv"
-dotenv.config({path:'.env'})
+import 'dotenv/config'
 import morgan from "morgan"
 import Handlebars from "handlebars"
 import {engine} from "express-handlebars"

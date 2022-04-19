@@ -5,6 +5,7 @@ class CommentController{
         res.render('pagePost')
     }
     createComment(req, res){
+        req.body.createdBy = req.signedCookies.Userid
         CommentModel.create(req.body)
         res.json(req.body)
     }

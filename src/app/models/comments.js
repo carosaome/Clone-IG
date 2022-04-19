@@ -7,9 +7,17 @@ const ObjectId = Schema.ObjectId;
 
 const Comment = new Schema({
   id: ObjectId,
-  postId: { type : mongoose.Types.ObjectId},
+  postId: { 
+      type : mongoose.Types.ObjectId,
+      ref:'Post',
+      required: true 
+    },
   content: String,
-  createdBy: { type : mongoose.Types.ObjectId}
+  createdBy: { 
+      type : mongoose.Types.ObjectId,
+      ref:'User'
+
+    }
 },{
   timestamps: true, 
 }

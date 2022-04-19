@@ -10,7 +10,10 @@ const Post = new Schema({
   title: String,
   imgUrl: String,
   slug: {type:String, slug:"title", unique:true},
-  createdBy: String
+  createdBy: {
+     type : mongoose.Types.ObjectId,
+     ref:'User'
+  }
 },{
   timestamps: true, 
 }
