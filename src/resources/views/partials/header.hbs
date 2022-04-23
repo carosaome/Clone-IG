@@ -138,7 +138,6 @@
       .then((data)=>{
         link.setAttribute('href', `/${data.username}`)
         avatar.setAttribute('src', `/${data.avatar}`)
-        console.log(data)
       })
   }
   fetchDataUser()
@@ -148,7 +147,6 @@
     
     let x =  document.cookie = "Userid =;path=/;"
     location.reload()
-    console.log(x)
   })
 
 </script>

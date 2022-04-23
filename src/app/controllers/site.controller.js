@@ -5,20 +5,17 @@ import CommentModel from "../models/comments.js"
 class SiteController {
     async index(req, res, next) {
         const offset = req.query.offset
-        console.log(offset);
         const loadPosts = (Number(offset) - 1) * 2        
         const posts = await PostModel.find({})
                                 .populate('createdBy', 'username avatar')
                                 .skip(0)
                                 .limit(2)
-                                console.log(posts);
            res.render('home', {posts})
 
 
     }
     async loadPost(req, res, next) {
         const offset = req.query.offset
-        console.log(offset);
         const loadPosts = (Number(offset) - 1) * 2        
         const posts = await PostModel.find({})
                                 .populate('createdBy', 'username avatar')
@@ -57,7 +54,6 @@ class SiteController {
       try {
           
         const foundUser = await UserModel.findById(req.signedCookies.Userid)
-        console.log(foundUser);
         res.json(foundUser)
         
       } catch (error) {
@@ -67,4 +63,3 @@ class SiteController {
     }
 }
 export default new SiteController
-console.log(process.env.CLOUD_SECRET_KEY);
