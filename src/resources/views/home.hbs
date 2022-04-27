@@ -120,10 +120,10 @@
                             <span class="content">{{this.title}}</span>
                         </div>
                         <div class="news__views__comment">
-                            Views all <span class="news__views__num-comment"> 123 </span> comments
+                            Views all <span class="news__views__num-comment"> {{this.totalComments}} </span> comments
                         </div>
                         <div class="news__post-time">
-                            1days ago
+                            {{this.createdAt}}
                         </div>
                     </div>
                     <div class="container__comment">
@@ -286,10 +286,10 @@
                             <span class="content">${post.title}</span>
                         </div>
                         <div class="news__views__comment">
-                            Views all <span class="news__views__num-comment"> 123 </span> comments
+                            Views all <span class="news__views__num-comment"> ${post.totalComments} </span> comments
                         </div>
                         <div class="news__post-time">
-                            1days ago
+                            ${post.createdAt}
                         </div>
                     </div>
                     <div class="container__comment">

@@ -1,14 +1,13 @@
 <div class="grid wide">
     <div class="container__postDetail">
-        <div style="background-image:url({{foundPost.imgUrl}})"
-            class="container__postDetail__img">
-           
+        <div style="background-image:url({{foundPost.imgUrl}})" class="container__postDetail__img">
+
         </div>
         <div class="container__postDetail__comments">
             <div class="header__news">
                 <div class="header__infor">
                     <div class="header__infor-user-img">
-                      <img src="/{{foundPost.createdBy.avatar}}" alt="">
+                        <img src="/{{foundPost.createdBy.avatar}}" alt="">
                     </div>
                     <div class="header__infor-user-name">
                         {{foundPost.createdBy.username}}
@@ -27,12 +26,11 @@
             </div>
 
             <div class="body__comment">
-               {{#each foundComments}}
+                {{#each foundComments}}
                 <div class="container__comment">
                     <div class="header__infor">
                         <div class="header__infor-user-img">
-                            <img src="/{{this.createdBy.avatar}}"
-                                alt="">
+                            <img src="/{{this.createdBy.avatar}}" alt="">
                         </div>
                         <div class="header__infor-user-name">
                             {{this.createdBy.username}}
@@ -104,7 +102,7 @@
                             </path>
                         </svg>
 
-                        <input name="content" type="text" placeholder="Add a comment...">
+                        <input name="content" id="input" type="text" placeholder="Add a comment...">
                     </div>
                     <button class="btn btn__post-comment">Post</button>
                 </form>
@@ -112,39 +110,53 @@
         </div>
     </div>
 </div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-     function handleSubmitForm() {
-        let formSubmit = document.querySelectorAll('.form__comment')
-        formSubmit.forEach((item) => {
+    const socket = io();
 
-            item.addEventListener('submit', async (e) => {
-                e.preventDefault()
-                const postId = item.getAttribute('id')
-                const content = item.elements['content'].value
-                const data = { postId, content }
-                const sendComment = await fetch('/api/comment', {
-                    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                    mode: 'cors', // no-cors, *cors, same-origin
-                    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                    credentials: 'same-origin', // include, *same-origin, omit
-                    headers: {
-                        'Content-Type': 'application/json'
-                        // 'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    redirect: 'follow', // manual, *follow, error
-                    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                    body: JSON.stringify(data)
-                })
-                    .then((res) => {
-                        res.json()
-                    })
-                    .then((data) => {
-                        console.log(data)
-                    })
+    const BoxComment = document.querySelector('.body__comment');
+    const form = document.querySelector('.form__comment');
+    let input = document.getElementById('input');
 
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const postId = form.getAttribute('id')
+        console.log(postId)
+        let content = form.elements['content'].value
+        const data = { postId, content }
+        if (content) {
+            await axios({
+                method: 'post',
+                url: '/api/comment',
+                data: data
             })
-        })
-    }
-    handleSubmitForm()
+            .then((res)=>{
+               socket.emit('chat message', res.data);
+            })
+            
+            input.value = ''
+        }
+    });
+
+    socket.on('chat message', function (data) {
+        var item = document.createElement('div');
+        item.classList.add('container__comment')
+        item.innerHTML = `
+                    <div class="header__infor">
+                        <div class="header__infor-user-img">
+                            <img src="/${data.userAvatar}" alt="">
+                        </div>
+                        <div class="header__infor-user-name">
+                            ${data.userName}
+                        </div>
+                    </div>
+                    <span class="content__comment">${data.content} </span>
+                    `
+
+        BoxComment.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+
 </script>

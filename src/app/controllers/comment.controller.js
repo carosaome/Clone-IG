@@ -1,12 +1,18 @@
 import CommentModel from "../models/comments.js"
-
+import UserModel from "../models/users.js"
 class CommentController{
     getComment(req, res){
         res.render('pagePost')
     }
-    createComment(req, res){
+   async createComment(req, res){
         req.body.createdBy = req.signedCookies.Userid
-        CommentModel.create(req.body)
+        
+        await CommentModel.create(req.body)
+        const foundUser = await UserModel.findById(req.body.createdBy)
+        const userAvatar = foundUser.avatar
+        const userName = foundUser.username
+        req.body.userAvatar = userAvatar
+        req.body.userName = userName
         res.json(req.body)
     }
     
