@@ -10,7 +10,6 @@ class SiteController {
             .limit(2)
             
         const parsePosts = JSON.parse(JSON.stringify(rawPosts))
-        console.log(parsePosts)
         const postAddedTotalComent = await Promise.all(parsePosts.map(async (item) => {
             const arrComments = await CommentModel.find({ postId: item._id })
             return {

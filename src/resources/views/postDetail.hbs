@@ -123,7 +123,6 @@
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
         const postId = form.getAttribute('id')
-        console.log(postId)
         let content = form.elements['content'].value
         const data = { postId, content }
         if (content) {
@@ -133,14 +132,16 @@
                 data: data
             })
             .then((res)=>{
-               socket.emit('chat message', res.data);
+               socket.emit('comment', res.data);
+               
             })
             
             input.value = ''
         }
     });
 
-    socket.on('chat message', function (data) {
+    socket.on('comment', function (data) {
+        console.log(socket.id)
         var item = document.createElement('div');
         item.classList.add('container__comment')
         item.innerHTML = `

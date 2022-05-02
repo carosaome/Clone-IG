@@ -1,46 +1,196 @@
-<html>
-  <head>
-    <title>Socket.IO chat</title>
-    <style>
-      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+<div class="messager">
+  <div class="grid wide box__messager">
+    <div class="box__messager__chatMenu col l-4">
+      {{#each userActive}}
+      <div id="{{this._id}}" class="chatMenuWrapper">
+        <div class="chatMenuWrapper__img">
+          <img src="{{this.avatar}}" alt="This is avatar">
+        </div>
+        <div class="chatMenuWrapper__username">
+          {{this.username}}
+        </div>
+        <div class="chatMenuWrapper__online-budge"></div>
+      </div>
+      {{/each}}
+    </div>
 
-      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
-      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
-      #input:focus { outline: none; }
-      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+    <div class="box__messager__chatBox l-8">
+      <h1 style="text-align: center;">Click to start converstaion</h1>
+    </div>
+  </div>
+</div>
 
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages > li { padding: 0.5rem 1rem; }
-      #messages > li:nth-child(odd) { background: #efefef; }
-    </style>
-  </head>
-  <body>
-    <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
-  </body>
-</html>
 <script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script>
-   var socket = io();
 
-      var messages = document.getElementById('messages');
-      var form = document.getElementById('form');
-      var input = document.getElementById('input');
-
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (input.value) {
-          socket.emit('chat message', input.value);
-          input.value = '';
+  const socket = io()
+  const listConverstations = document.querySelectorAll('.chatMenuWrapper')
+  listConverstations.forEach((converstation) => {
+    let guestId = converstation.getAttribute('id')
+    converstation.addEventListener('click', () => {
+      axios({
+        method: 'post',
+        url: '/message',
+        data: {
+          guestId
         }
-      });
+      })
+        .then((res) => {
+          const converstaionId = res.data.foundCon._id
+          const guestAvt = res.data.foundGuest.avatar
+          const guestUsername = res.data.foundGuest.username
+          const boxMessgae = document.querySelector('.box__messager__chatBox')
+          boxMessgae.innerHTML = `
+              <div class="chatBox__header">
+                  <div class="chatBox__header-img">
+                    <img
+                      src="${guestAvt}"
+                      alt="">
+                  </div>
+                  <span class="chatBox__header-username">
+                    ${guestUsername}
+                  </span> 
+              </div>
+              <div class="chatBox__body">
+               
 
-      socket.on('chat message', function(msg) {
-        var item = document.createElement('li');
-        item.textContent = msg;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
-      });
+              </div>
+              <div id="${converstaionId}" class="chatBox__submitForm">
+                <form class="submitForm" action="">
+                  <input id="input" placeholder="Message..." name="content" class="chatBox__submitForm__input" type="text">
+                  <button class="chatBox__submitForm__button">
+                    Send
+                  </button>
+                </form>
+              </div>
+          
+          `
+          return res
+        })
+        .then((res) => {
+          const foundMessages = res.data.foundMessages
+          const guestId = res.data.foundGuest._id
+          const boxMessage = document.querySelector('.chatBox__body')
+          const formSubmit = document.querySelector('.chatBox__submitForm')
+
+          if (foundMessages.length > 0) {
+            foundMessages.map((mess) => {
+              boxMessage.innerHTML += `
+                  <div class="messageWrapper ${mess.createdBy !== guestId ? 'own' : ''}">
+                        <div class="message-img">
+                          <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAOVBMVEX09PSqqqrx8fHu7u6srKyvr6/IyMi7u7uysrLj4+Pq6urm5ua3t7fa2trU1NS/v7/Ozs7X19fDw8P05S9ZAAAGiklEQVR4nO2diZarIAyGK0bF3fr+DzviUpcqoJBA5/Dd5UxnWspfCIQAmdcrEAgEAoFAIBAIBAKBQCAQCAQCAW3ivEnbjCcQRZDwrE2bPHZdp9uUTc8joSD6MD7ifVO6rps+ecrXyu+UjPA0d11DHYqOHwQcGX7Iu8J1PRXUrUzClrZ2XVcJdSVtikPDVL5KySt9FROVj8YS95HCNr6aZPjXezcgv5PoMNxq6Bj+Jm/XNd/B+uUj1lbyeXLPXNd+peS3NBzUcG+myAYeaNjKaVwrmEiNVIykrjUMMO0pUEbr3FDizIaOKMocj8Ns1GFmItPLM6dtIvoVrJV5rEL877R39UstDNrk8+renY5urYhJiywv71zpqNfqm7XI8oUjd7gEUys/KgInczy77bWrqVwYvIUJ/RsHU3wemQ5Xe+ay6JdaCB1LUFHraHB0RBGxJxwn09taHLbmohJapys1dEwkSkjtvbCq4ABl7A5l6J0BQp8rRmyQYX6ns5IOT4eAznnk6sqYwKl01Lg66LzgHlcI2RKLGYax1ACNE4zcswQ0fQu9Z1H1LeQxS0AybqG6JzNA4aa87bqKpzoiil0TTD/rA4ULbCnYKycjEGJzoX4J4OvA9Hw3QvA94JxCB0U0ZY6TorXLXDr+3I4WPtmDH0xBXlQt4C+uOhpjxxdCMh9SzIj/TQjuqEUhpKMRQmDsWAr24AtpInRfSxSPP48QrNgF+DP7v/G1ioikaxGsdWlmdnwd4+YhqhhROMVWYk/RtSgCW+jjL83o+3qVy5sh6ohIznIkeCIWEgodrxa/a7UkQt4ReteiOZ6NHxCi2g61ckBWBk3PmvoWKlQH/5nlo3M7gGzn7YW+bqc7jVLgjlqEh1FQzZ3K1AU5ZouQngZEbBLKBhnP/CJBffYXIQQ8lUh9rpwd7xRbEsPJjzDXGDKoDm/saC3vXAGd/74nTuybCfFZ2ZncbucSZTm6d2E9nu3sJkx/71brNVMx7u4msWxXlccaJlzee4urqS5GjTK/vHJ6E7HgRs2xKBngjrNAFNxOi7jWMSixciOmcq5jvK1r3LVc39SdYMbHTr1JMtDs3C6Qu8UwPWP52t29/LNPr6zWiumc04bNRFp5kylBwNKLREFnDbJ7kPrSrRby6kk6ES9TvDTJ3QQvyZV1OG4l1s1LFLmZzD+FpPOhVzWnI3/ccc1GAd6dl0CbuWYYpS58PFa3OqNWW5+3xuCFEo5ibIwFXSaYiRt5diqozpvzJVLeiJ9TdblyvneRXC9Mi3fPv01FPOb9+9qtqud9VpokPM2a20C6NC3qrs9WkwGe9V0t9Q3XoB/BZB/vHKtW7ezFRVGWRaHxxF08GTvxVn7IlMetxT3q7UUh0QdRp8r62OtHF8PYNtm3izM8RIwNdVsFNhtl2xxr0VjRoeO6Y/HdoTUcZMoW1tJ2hoIyDseX+Y4AUgPTjNNTj2b8HsbKcYn8nL3l8OeplEHGRfACKUZU8GMPPvax9EEHK9PLkP78PdvRlVnHlesxfT+7cKAuYHWmUahdJTHfLk5PP7qRRD9xbJ4mF4XsvglWlbBqXoxfvd9mbZiktbJfx/WiAvYvPpQLlu2EZSD53L5/BJnEqRpcsAwuXnhRprXodr/95HVJsrSp89XHiou8btLsxjnC9f0s7TcYHqGBZMAwFmnlmM0b/ZyvCrBygiu3vHn7RIaNAyoYe7cPANP9XrG5BsY7IEYSZqM3HLqILiJpYHYzkejWix4GZhJz1wPWFv7cTAgSh9zgeb6q4wrdNU9X8Uw3jkvGw8Nc/oxYC89GLrxji895dOAR/Sj/Ex4cTJunEN+a5f5kcucXV9ABt+/1EV3Jvc/dIZgg99QzbjaJtw1yt0mQkuBa4J6VeNwg95qEJPXUU26krCpd11WO/vSeejcPbgD94BB+RkkjQPtWnG/rkCPa6xKvTV2gae6Fw+CPDqCbxtG/BdUXegssP/3eLXqze+E62Ctnqp1O32ps3aXAYaqczqEbL5e4G8aPWGPJy7xuD8FYQfWcmH+e7DGgsXb/gcFXoB6AvZ/WJ5ST+2wiXnctLSPxNJx1QOMXLDW/0BwC1UxClE/SHNXq6kdsXW3tBKma7KBI+ESTKNoGivxCXm3jypHP7V5H5vbIF+5EiaJtIB9/f2b0VY2/fu2sS5Hvuvu+qtogX1v5u53whTwA4e1G1TdyIT8zsat+a8y/EfIzHkqkyKTrunY3OAj5AzsqYFKeRpk7AAAAAElFTkSuQmCC"
+                            alt="">
+                        </div>
+                        <div class="messageWrapper-content">
+                          <span class="messageWrapper-text">
+                            ${mess.content}
+                          </span>
+                        </div>
+                        <div class="messageWrapper-time">
+                          <span class="timeAgo"> 10 days</span> ago
+                  </div>
+          `
+
+            })
+          }
+          else {
+            boxMessage.innerHTML = ``
+          }
+
+          formSubmit.addEventListener('submit', async (e) => {
+            e.preventDefault()
+            const converstationId = formSubmit.getAttribute('id')
+            const content = document.getElementById("input").value;
+            const data = { converstationId, content }
+            if (content) {
+              await axios({
+                method: 'post',
+                url: '/message/sendMessage',
+                data: data
+              })
+                .then((res) => {
+                  console.log(socket.id)
+                  res.data.socketId = socket.id
+                  socket.emit('send-message', res.data);
+
+                })
+
+              input.value = ''
+            }
+
+          });
+
+          socket.on('getMessage', (data)=>{
+            console.log(data, guestId)
+            const boxMessage = document.querySelector('.chatBox__body')
+            const item = document.createElement('div')
+            item.classList.add('container__messages')
+            item.innerHTML = `
+                   <div class="messageWrapper ${guestId !== data.createdBy ? 'own': ''}">
+                        <div class="message-img">
+                          <img
+                            src="data:image/png;base64,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"
+                            alt="">
+                        </div>
+                        <div class="messageWrapper-content">
+                          <span class="messageWrapper-text">
+                            ${data.content}
+                          </span>
+                        </div>
+                        <div class="messageWrapper-time">
+                          <span class="timeAgo"> 10 days</span> ago
+                  </div>
+
+            `
+            boxMessage.appendChild(item)
+            window.scrollTo(0, document.body.scrollHeight);
+            console.log(data)
+          })
+        })
+    })
+  })
 </script>
+
+
+{{!-- <div class="chatBox__header">
+  <div class="chatBox__header-img">
+    <img
+      src="data:image/png;base64,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"
+      alt="">
+  </div>
+  <span class="chatBox__header-username">
+    Carosaome
+  </span>
+</div>
+<div class="chatBox__body">
+  <div class="messageWrapper own">
+    <div class="message-img">
+      <img
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAOVBMVEX09PSqqqrx8fHu7u6srKyvr6/IyMi7u7uysrLj4+Pq6urm5ua3t7fa2trU1NS/v7/Ozs7X19fDw8P05S9ZAAAGiklEQVR4nO2diZarIAyGK0bF3fr+DzviUpcqoJBA5/Dd5UxnWspfCIQAmdcrEAgEAoFAIBAIBAKBQCAQCAQCAW3ivEnbjCcQRZDwrE2bPHZdp9uUTc8joSD6MD7ifVO6rps+ecrXyu+UjPA0d11DHYqOHwQcGX7Iu8J1PRXUrUzClrZ2XVcJdSVtikPDVL5KySt9FROVj8YS95HCNr6aZPjXezcgv5PoMNxq6Bj+Jm/XNd/B+uUj1lbyeXLPXNd+peS3NBzUcG+myAYeaNjKaVwrmEiNVIykrjUMMO0pUEbr3FDizIaOKMocj8Ns1GFmItPLM6dtIvoVrJV5rEL877R39UstDNrk8+renY5urYhJiywv71zpqNfqm7XI8oUjd7gEUys/KgInczy77bWrqVwYvIUJ/RsHU3wemQ5Xe+ay6JdaCB1LUFHraHB0RBGxJxwn09taHLbmohJapys1dEwkSkjtvbCq4ABl7A5l6J0BQp8rRmyQYX6ns5IOT4eAznnk6sqYwKl01Lg66LzgHlcI2RKLGYax1ACNE4zcswQ0fQu9Z1H1LeQxS0AybqG6JzNA4aa87bqKpzoiil0TTD/rA4ULbCnYKycjEGJzoX4J4OvA9Hw3QvA94JxCB0U0ZY6TorXLXDr+3I4WPtmDH0xBXlQt4C+uOhpjxxdCMh9SzIj/TQjuqEUhpKMRQmDsWAr24AtpInRfSxSPP48QrNgF+DP7v/G1ioikaxGsdWlmdnwd4+YhqhhROMVWYk/RtSgCW+jjL83o+3qVy5sh6ohIznIkeCIWEgodrxa/a7UkQt4ReteiOZ6NHxCi2g61ckBWBk3PmvoWKlQH/5nlo3M7gGzn7YW+bqc7jVLgjlqEh1FQzZ3K1AU5ZouQngZEbBLKBhnP/CJBffYXIQQ8lUh9rpwd7xRbEsPJjzDXGDKoDm/saC3vXAGd/74nTuybCfFZ2ZncbucSZTm6d2E9nu3sJkx/71brNVMx7u4msWxXlccaJlzee4urqS5GjTK/vHJ6E7HgRs2xKBngjrNAFNxOi7jWMSixciOmcq5jvK1r3LVc39SdYMbHTr1JMtDs3C6Qu8UwPWP52t29/LNPr6zWiumc04bNRFp5kylBwNKLREFnDbJ7kPrSrRby6kk6ES9TvDTJ3QQvyZV1OG4l1s1LFLmZzD+FpPOhVzWnI3/ccc1GAd6dl0CbuWYYpS58PFa3OqNWW5+3xuCFEo5ibIwFXSaYiRt5diqozpvzJVLeiJ9TdblyvneRXC9Mi3fPv01FPOb9+9qtqud9VpokPM2a20C6NC3qrs9WkwGe9V0t9Q3XoB/BZB/vHKtW7ezFRVGWRaHxxF08GTvxVn7IlMetxT3q7UUh0QdRp8r62OtHF8PYNtm3izM8RIwNdVsFNhtl2xxr0VjRoeO6Y/HdoTUcZMoW1tJ2hoIyDseX+Y4AUgPTjNNTj2b8HsbKcYn8nL3l8OeplEHGRfACKUZU8GMPPvax9EEHK9PLkP78PdvRlVnHlesxfT+7cKAuYHWmUahdJTHfLk5PP7qRRD9xbJ4mF4XsvglWlbBqXoxfvd9mbZiktbJfx/WiAvYvPpQLlu2EZSD53L5/BJnEqRpcsAwuXnhRprXodr/95HVJsrSp89XHiou8btLsxjnC9f0s7TcYHqGBZMAwFmnlmM0b/ZyvCrBygiu3vHn7RIaNAyoYe7cPANP9XrG5BsY7IEYSZqM3HLqILiJpYHYzkejWix4GZhJz1wPWFv7cTAgSh9zgeb6q4wrdNU9X8Uw3jkvGw8Nc/oxYC89GLrxji895dOAR/Sj/Ex4cTJunEN+a5f5kcucXV9ABt+/1EV3Jvc/dIZgg99QzbjaJtw1yt0mQkuBa4J6VeNwg95qEJPXUU26krCpd11WO/vSeejcPbgD94BB+RkkjQPtWnG/rkCPa6xKvTV2gae6Fw+CPDqCbxtG/BdUXegssP/3eLXqze+E62Ctnqp1O32ps3aXAYaqczqEbL5e4G8aPWGPJy7xuD8FYQfWcmH+e7DGgsXb/gcFXoB6AvZ/WJ5ST+2wiXnctLSPxNJx1QOMXLDW/0BwC1UxClE/SHNXq6kdsXW3tBKma7KBI+ESTKNoGivxCXm3jypHP7V5H5vbIF+5EiaJtIB9/f2b0VY2/fu2sS5Hvuvu+qtogX1v5u53whTwA4e1G1TdyIT8zsat+a8y/EfIzHkqkyKTrunY3OAj5AzsqYFKeRpk7AAAAAElFTkSuQmCC"
+        alt="">
+    </div>
+    <div class="messageWrapper-content">
+      <span class="messageWrapper-text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo ultrices imperdiet. Morbi elementum
+        ac ex ac ullamcorper. Aenean mattis, neque vel vestibulum euismod, dolor augue auctor mi, sit amet
+        tristique elit libero in magna. Nulla vehicula eros ac magna viverra commodo. Vestibulum arcu nisl,
+        consectetur ut convallis id, maximus in neque.
+      </span>
+    </div>
+    <div class="messageWrapper-time">
+      <span class="timeAgo"> 10 days</span> ago
+    </div>
+  </div>
+
+</div>
+<div class="chatBox__submitForm">
+  <form class="submitForm" action="">
+    <input placeholder="Message..." name="content" class="chatBox__submitForm__input" type="text">
+    <button class="chatBox__submitForm__button">
+      Send
+    </button>
+  </form>
+</div> --}}

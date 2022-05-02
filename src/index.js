@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser"
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors"
+import converstations from "./app/models/converstations.js"
 
 const app = new express()
 const port = 9999
@@ -39,12 +40,27 @@ const io = new Server(server, {
 });
 route(app)
 io.on('connection', (socket) => {
-    console.log('a user connected');
-  
-    socket.on('chat message', msg => {
-      console.log(msg);
-      io.emit('chat message', msg);
+    console.log(socket)
+    // send and get Comment
+    socket.on('comment', cmt => {
+      io.emit('comment', cmt);
     });
+
+    // send and get message
+    let roomId
+    socket.on('send-message', (data)=>{
+        console.log(socket);
+
+        roomId = data.converstationId
+        socket.join(roomId);
+        io.to(roomId).emit('getMessage', data)
+
+    })
+
+    socket.on("disconnect", () => {
+        socket.leave(roomId);
+      });
+    
   });
 
 connect()

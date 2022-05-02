@@ -27,7 +27,6 @@ class AuthController {
         users.find({ username: req.body.username })
             .then((user) => {
                 if (user.length) {
-                    console.log('user exist')
                     res.send('user exist')
                 }
                 else {

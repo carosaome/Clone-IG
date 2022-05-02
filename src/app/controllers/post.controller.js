@@ -13,7 +13,6 @@ class PostController{
                                              .populate('createdBy', 'username avatar') 
         const foundComments = await CommentModel.find({postId:postId})
                                                 .populate('createdBy', 'username avatar')
-                                             console.log(foundComments);
 
         res.render('postDetail', {foundComments, foundPost})
       } catch (error) {

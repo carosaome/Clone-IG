@@ -4,7 +4,6 @@ import dotenv from "dotenv"
 dotenv.config({path:'.env'})
 
 const uploadToDisk = (req, res) => {
-  console.log(req.file.originalname);
 
   res.send({ success: 1, data: req.file.originalname })
 }
@@ -16,7 +15,6 @@ cloudinary.config({
 })
 
 const uploadToCloud = async (req, res, next) => {
-  console.log(process.env.CLOUD_SECRET_KEY);
   const streamUpload = (req) => {
     return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
