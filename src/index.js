@@ -11,11 +11,8 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors"
 import converstations from "./app/models/converstations.js"
-
 const app = new express()
 const port = 9999
-
-
 app.engine('hbs', engine({
     extname: 'hbs',
     handlebars: allowInsecurePrototypeAccess(Handlebars)
@@ -24,10 +21,8 @@ app.use(express.static('src/public'))
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(cookieParser(process.env.SECRET_KEY))
-
 // HTTP logger
 // app.use(morgan('combined'))
-
 app.set('view engine', 'hbs')
 app.set('views', 'src/resources/views')
 
@@ -39,27 +34,37 @@ const io = new Server(server, {
     }
 });
 route(app)
+
+let users=[]
+const addUser = (userId, socketId)=>{
+    !users.some(user => user.userId === userId) &&
+        users.push({userId, socketId})
+}
 io.on('connection', (socket) => {
-    console.log(socket)
     // send and get Comment
     socket.on('comment', cmt => {
       io.emit('comment', cmt);
     });
-
+    // take userId and socketId from user
+    socket.on('addUser',(userId, socketId)=>{
+        addUser(userId, socketId)
+        io.emit("getUser", users, socket.id)
+    })
     // send and get message
-    let roomId
     socket.on('send-message', (data)=>{
-        console.log(socket);
-
-        roomId = data.converstationId
-        socket.join(roomId);
+        let  roomId = data.converstationId
         io.to(roomId).emit('getMessage', data)
 
     })
+    // join room
+    socket.on('join-room', (roomId)=>{
+        console.log('user join room ' + roomId)
+        socket.join(roomId)
+    })
 
     socket.on("disconnect", () => {
-        socket.leave(roomId);
-      });
+        console.log('disconnect');
+    });
     
   });
 

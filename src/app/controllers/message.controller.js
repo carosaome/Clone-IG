@@ -8,7 +8,33 @@ class MessageController{
         const userId = req.signedCookies.Userid
         const userActive = await UserModel.find({ _id: { $ne: userId } })
 
-        res.render('messagePage', {userActive})
+        res.render('messagePageActiveUser', {userActive})
+    }
+    async renderBoxChat(req, res){
+        const userId = req.signedCookies.Userid
+        const {guestId} = req.params
+        const userActive = await UserModel.find({ _id: { $ne: userId } })
+        const foundCon = await ConverstationModel.findOne({
+            member:{ 
+                $all:[userId, guestId]
+            }}).populate('member', 'username avatar')
+        if(foundCon){
+            const foundConId = foundCon._id
+            const foundMessages = await MessageModel.find({
+                        converstationId : foundConId
+            })
+            const foundGuest = await UserModel.findById(guestId)
+            console.log(foundGuest);
+            res.render('messagePage', {foundConId, foundMessages, userActive, foundGuest})
+            return
+        }
+        else{
+            ConverstationModel.create({
+                member: [userId, guestId]
+            })
+            res.send('sucess')
+        }            
+        // res.render('messagePage', {userActive})
     }
     async renderConverstation(req, res){
         const userId = req.signedCookies.Userid

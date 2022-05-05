@@ -1,0 +1,23 @@
+<div class="messager">
+  <div class="grid wide box__messager">
+    <div class="box__messager__chatMenu col l-4">
+      {{#each userActive}}
+      <a id="chatmenuWrapper" href="/message/{{this._id}}">
+        <div id="{{this._id}}" class="chatMenuWrapper">
+          <div class="chatMenuWrapper__img">
+            <img src="/{{this.avatar}}" alt="This is avatar">
+          </div>
+          <div class="chatMenuWrapper__username">
+            {{this.username}}
+          </div>
+          <div class="chatMenuWrapper__online-budge"></div>
+        </div>
+      </a>
+      {{/each}}
+    </div>
+
+    <div class="box__messager__chatBox l-8">
+      <h1>Click to start converstation</h1>
+    </div>
+  </div>
+</div>
