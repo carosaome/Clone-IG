@@ -35,21 +35,12 @@ const io = new Server(server, {
 });
 route(app)
 
-let users=[]
-const addUser = (userId, socketId)=>{
-    !users.some(user => user.userId === userId) &&
-        users.push({userId, socketId})
-}
 io.on('connection', (socket) => {
     // send and get Comment
     socket.on('comment', cmt => {
       io.emit('comment', cmt);
     });
-    // take userId and socketId from user
-    socket.on('addUser',(userId, socketId)=>{
-        addUser(userId, socketId)
-        io.emit("getUser", users, socket.id)
-    })
+   
     // send and get message
     socket.on('send-message', (data)=>{
         let  roomId = data.converstationId
